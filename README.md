@@ -59,6 +59,10 @@ python manage.py runserver --settings pendaftaran_pasien.settings
 --> To run the tailwind, we use :
 
 ```bash
+--> Install the dependencies
+python manage.py tailwind install
+
+--> Run the tailwind
 python manage.py tailwind start
 ```
 
