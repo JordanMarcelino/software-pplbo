@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core.apps.CoreConfig",
-    'tailwind',
-    'theme',
-    'django_browser_reload',
+    "tailwind",
+    "theme",
+    "django_browser_reload",
+    "verify_email",
+    "django_email",
+    "captcha"
 ]   
 
 MIDDLEWARE = [
@@ -62,7 +65,8 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / 'templates'
+            BASE_DIR / 'templates',
+            BASE_DIR / 'theme/templates',
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -135,6 +139,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_FROM = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+PASSWORD_RESET_TIMEOUT = 14400
+
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
+SILENCE_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
+AUTH_USER_MODEL = 'core.Users'
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend','core.backends.EmailBackend']
 
 STATIC_URL = "static/"
 MEDIA_URL = '/images/'
