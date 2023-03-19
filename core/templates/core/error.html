@@ -1,0 +1,9 @@
+{% extends 'main.html'%} {% block title %} {{status_code}} {% endblock %} {% block content %}
+<div class="w-full flex flex-col items-center justify-center h-screen text-center gap-12 px-4">
+    <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold">{{status_code}}</h1>
+    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold">{{error_message}}</h2>
+    <div class="group">
+        <a href="{% url 'home' %}" class="btn">Homepage</a>
+    </div>
+</div>
+{% endblock %}
