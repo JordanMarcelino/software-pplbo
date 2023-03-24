@@ -5,6 +5,7 @@
  * https://unpkg.com/browse/tailwindcss@latest/stubs/defaultConfig.stub.js
  */
 
+const colors = require("tailwindcss/colors");
 module.exports = {
     content: [
         /**
@@ -42,7 +43,16 @@ module.exports = {
         "../../**/*.py",
     ],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                poppins: ["Poppins", "sans-serif"],
+            },
+            colors: {
+                neutral: colors.gray[900],
+                primary: colors.yellow[300],
+                secondary: colors.amber[700],
+            },
+        },
     },
     plugins: [
         /**

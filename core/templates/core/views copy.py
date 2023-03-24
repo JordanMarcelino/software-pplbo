@@ -1,4 +1,5 @@
 import requests
+from itertools import zip_longest
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
@@ -9,26 +10,26 @@ from django.utils.encoding import force_str
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
-from .models import Users, EmailConfirmation, ResetPassword, Queue, RekamMedis
-from .forms import UserCreateForm, UserUpdateForm, SetPasswordForm
+from .models import Users, Proxy, Orders, EmailConfirmation, ResetPassword
+from .forms import UserCreateForm, UserUpdateForm, ProxyCreateForm, SetPasswordForm
 from .utils import send_email_confirmation, send_reset_password
 from .decorators import user_authenticated
 # Create your views here.
 
+@user_authenticated(redirect_url='proxies')
 def index(request):
     return render(request, 'core/home.html')
-
 
 @user_authenticated
 def login_page(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = request.POST.get('email').lower() if request.POST.get('email') else ""
         password = request.POST.get('password') if request.POST.get('password') else ""
         recaptcha_response = request.POST.get('g-recaptcha-response') if request.POST.get('g-recaptcha-response') else ""
         resend = request.POST.get('resend')
         
         if resend:
-            send_email_confirmation(request, Users.objects.get(Q(username__iexact=email) | Q(email__iexact=email) | Q(nik=email)))
+            send_email_confirmation(request, Users.objects.get(email=email))
             messages.success('Email confirmation has been sended')
             return redirect('login')
         else:
@@ -45,7 +46,7 @@ def login_page(request):
                             return render(request, 'core/check_email.html', {'email':email})
                         else:
                             login(request, user)
-                            return redirect('home')
+                            return redirect('proxies')
                     else:
                         messages.error(request, "Email or Password is wrong!")
             else:
@@ -53,7 +54,6 @@ def login_page(request):
         
     context = {'page': 'login', 'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY}
     return render(request, 'core/authentication.html', context=context)
-
 
 @user_authenticated
 def register_page(request):
@@ -64,7 +64,7 @@ def register_page(request):
             user = form.save(commit=False)
             user.is_active = False
             
-            if user.jenis_kelamin == "Perempuan":
+            if user.gender == "Perempuan":
                 user.avatar = "woman.png"
             
             user.save()
@@ -97,7 +97,6 @@ def activate_account(request, uidb64, token):
         
     return redirect('login')
         
-        
 @user_authenticated    
 def reset_password(request, uidb64, token):
     try:
@@ -124,7 +123,6 @@ def reset_password(request, uidb64, token):
         
     return redirect('login')
 
-
 @user_authenticated
 def forgot_password(request):
     if request.method == 'POST':
@@ -148,15 +146,60 @@ def forgot_password(request):
     context = {'recaptcha_site_key': settings.RECAPTCHA_PUBLIC_KEY}
     return render(request, 'core/forgot_password.html', context=context)
 
-
 @login_required(login_url='login')
 def logout_page(request):
     logout(request)
     return redirect('home')
 
-def daftar_dokter(request):
-    return render(request, 'core/daftar_dokter.html')
+@user_authenticated(redirect_url='proxies')
+def products(request, type):
+    type = " ".join(type.split("-"))
+    
+    product_list = ["HTTP Proxy", "HTTPS Proxy", "Dedicated Proxy", "SOCKS5 Proxy", "Shared Proxy", "Shared SOCKS5 Proxy"]
+    
+    proxy = None
+    for product in product_list:
+        if type == product.lower():
+            proxy = product
+    
+    if proxy is None:
+        raise Http404()
+    
+    context = {'proxy':proxy}
+    return render(request, 'core/products.html', context=context)
 
+@login_required(login_url='login')
+def proxies(request):
+    page = 1
+    proxy = Proxy.objects.all()
+    total_proxy = proxy.count()
+    proxy_zip = list(zip_longest(*([iter(proxy)] * 20), fillvalue=None))
+    orders = Orders.objects.filter(user=request.user).count()
+    if request.method == 'POST':
+        page = request.POST.get('page')
+        if int(page) > len(proxy_zip):
+            page = len(proxy_zip)
+    context = {'proxies':proxy, 'orders':orders, 'total': total_proxy, 'p_zip':len(proxy_zip), 'page': page}
+    return render(request, 'core/proxies.html', context=context)
+
+
+@login_required(login_url='login')
+def add_proxies(request):
+    form = ProxyCreateForm()
+    
+    if not request.user.is_staff:
+        redirect('home')
+    
+    
+    if request.method == 'POST':
+        form = ProxyCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('proxies')
+    
+    
+    context = {'form':form}
+    return render(request, 'core/add_proxies.html', context=context)
 
 def error_handler(request, exception=None, status_code=None):
     if status_code == 400:

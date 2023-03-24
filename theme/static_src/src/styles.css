@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap");
+
+@layer base {
+    html {
+        @apply scroll-smooth font-poppins bg-neutral;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .hide {
+            transition: all 1s;
+        }
+    }
+}
+
+@layer components {
+    .btn {
+        @apply w-max bg-yellow-300 py-2 px-4 font-bold border border-transparent whitespace-nowrap rounded-sm hover:bg-gray-900 border-yellow-300 hover:text-white duration-300 hover:border box-border;
+    }
+
+    .hamburger-toggle {
+        @apply [&>span:nth-child(1)]:rotate-[41deg] [&>span:nth-child(2)]:scale-0 [&>span:nth-child(3)]:-rotate-[43deg] [&>span:nth-child(3)]:-translate-y-[2px];
+    }
+}

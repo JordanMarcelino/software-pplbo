@@ -1,0 +1,17 @@
+{% extends 'main.html' %} {% block title %} Check Email - Chastain, Inc {% endblock %} {% block content %}
+<div class="w-full flex flex-col items-center justify-center h-screen text-center gap-12 px-4">
+    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white">We've send you an email to confirm your account, please check your email!</h2>
+    <div class="flex gap-4 items-center">
+        <form action="{%url 'login'%}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{email}}" />
+            <div class="group">
+                <button type="submit" class="btn text-black" name="resend">Resend</button>
+            </div>
+        </form>
+        <div class="group">
+            <a href="{% url 'login' %}" class="btn text-black">Homepage</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

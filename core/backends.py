@@ -2,14 +2,15 @@ from django.contrib.auth.backends import BaseBackend
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from core.models import Users
+from django.db.models import Q
 
 class EmailBackend(BaseBackend):
     def authenticate(self, request, email=None, password=None, **kwargs):
         try:
-            user = Users.objects.get(email=email)
+            user = Users.objects.get(Q(username__iexact=email) | Q(email__iexact=email) | Q(nik=email))
         except Users.DoesNotExist:
             return None
-
+        
         if user.check_password(password):
             return user
         else:

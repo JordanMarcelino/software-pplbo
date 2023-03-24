@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "verify_email",
     "django_email",
-    "captcha"
+    "captcha",
 ]   
 
 MIDDLEWARE = [

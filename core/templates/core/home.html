@@ -1,0 +1,44 @@
+{% extends 'main.html' %} {% load static %} {% block title %} Chastinc, Inc {% endblock %} {% block content %}
+<section class="px-16 flex flex-col md:flex-row min-h-screen gap-12">
+    <div class="w-full md:w-1/2">
+        <div class="text-white mt-36 max-w-lg flex flex-col gap-4">
+            <h1 class="text-5xl md:text-4xl lg:text-6xl font-semibold leading whitespace-nowrap">Chastain, Inc</h1>
+            <p>Tidak perlu ribet - ribet untuk datang ke klinik dan mengantri, langsung saja mengambil antrian secara online dan tunggu giliran anda!</p>
+        </div>
+
+        <div class="mt-10 flex flex-col gap-4 lg:flex-row">
+            <a href="" class="btn w-full lg:w-max">Daftar Antrian</a>
+            <a href="" class="btn w-full lg:w-max">Lihat Nomor Antrian</a>
+        </div>
+    </div>
+    <div class="hidden md:flex items-center justify-center w-full md:w-1/2">
+        <img src="{% static 'images/undraw_medicine_b-1-ol.svg'%}" alt="LOGO" class="object-cover" />
+    </div>
+</section>
+
+<section class="px-16 flex flex-col md:flex-row min-h-screen gap-12">
+    <div class="hidden md:flex items-center justify-center w-full md:w-1/2">
+        <img src="{% static 'images/undraw_doctor_kw-5-l.svg'%}" alt="LOGO" class="object-cover" />
+    </div>
+    <div class="w-full md:w-1/2">
+        <div class="text-white mt-36 max-w-lg flex flex-col gap-4">
+            <h1 class="text-5xl md:text-4xl lg:text-6xl font-semibold leading whitespace-nowrap">Dokter Handal</h1>
+            <p>Dilayani oleh dokter yang sudah tersertifikasi dan sudah berpengalaman selama bertahun - tahun, tidak perlu khawatir lagi!</p>
+        </div>
+
+        <div class="mt-10 flex flex-col gap-4 lg:flex-row">
+            <a href="" class="btn w-full lg:w-max">Daftar Dokter</a>
+        </div>
+    </div>
+</section>
+
+<section class="px-16 min-h-screen grid md:grid-cols-2 lg:grid-cols-3">
+    <div class="transition duration-[400ms] hover:shadow-[0_0_10px_#FFFFFF] relative w-[200px] h-[250px] rounded-md overflow-hidden cursor-pointer">
+        <img class="w-full h-full" src="{% static 'images/Angie Robertie.png' %}" alt="doc1" />
+        <div class="w-full absolute px-3 py-2 pt-8 bottom-0">
+            <h2 class="text-[24px] font-bold mb-[-5px]">Angie Roberto</h2>
+            <h2 class="text-[16px]">Dentistry</h2>
+        </div>
+    </div>
+</section>
+{% endblock %}
