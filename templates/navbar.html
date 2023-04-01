@@ -15,40 +15,130 @@
                 </a>
             </div>
             <ul class="hidden md:flex text-center gap-4">
+                {% if request.user.is_authenticated %} {% if request.user.is_staff %}
                 <li class="w-max list-none inline-block px-5 group">
                     <a href="{% url 'home' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Home</a>
                 </li>
                 <li class="w-max list-none inline-block px-5 group">
-                    <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Daftar Dokter</a>
+                    <a href="{% url 'input_dokter' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Daftar Dokter</a>
                 </li>
                 <li class="w-max list-none inline-block px-5 group">
-                    <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>FQA</a>
+                    <a href="{% url 'daftar_pasien' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Pasien</a>
+                </li>
+                <li class="list-none inline-block px-5 group">
+                    <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Nomor Antrian</a>
+                </li>
+                {% elif request.user.is_dokter %}
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'home' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Home</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'daftar_pasien' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Pasien</a>
+                </li>
+                {% else %}
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'home' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Home</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'daftar_dokter' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Daftar Dokter</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'faq' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>FAQ</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
                     <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
                 </li>
+
+                {% endif %} {% else %}
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'home' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Home</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'daftar_dokter' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Daftar Dokter</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'faq' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>FAQ</a>
+                </li>
+                <li class="list-none inline-block px-5 group">
+                    <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
         <div>
+            {% if not request.user.is_authenticated %}
             <ul class="flex">
                 <li class="list-none px-2"><a href="{% url 'login' %}" class="btn">Login</a></li>
                 <li class="list-none px-2 hidden md:block"><a href="{% url 'register' %}" class="btn">Sign Up</a></li>
             </ul>
+            {% else %}
+            <ul class="flex relative w-full h-full gap-4 sm:gap-8 font-semibold flex-row items-center justify-end pt-0 pr-4 md:pr-8">
+                <li class="relative w-12 cursor-pointer pfp">
+                    <img src="{{request.user.avatar.url}}" alt="avatar" class="object-cover object-center w-full rounded-full aspect-1 shadow-sm border-2 border-primary" />
+                    <div class="w-max h-max px-4 pt-8 pb-4 absolute top-full -right-4 bg-neutral translate-x-full opacity-0 transition-all duration-500 ease-in-out pfp-list text-white z-[999]">
+                        <ul class="flex flex-col gap-4">
+                            <li class="cursor-pointer">
+                                <a href="{% url 'profile' %}" class="hover:text-yellow-300 transition-all flex items-center justify-between gap-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                                    </svg>
+                                    Profile
+                                </a>
+                            </li>
+                            <li class="cursor-pointer">
+                                <a href="{% url 'logout' %}" class="hover:text-yellow-300 transition-all flex items-center justify-between gap-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+                                        />
+                                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                                    </svg>
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            {% endif %}
         </div>
         <div class="mobile-nav md:hidden duration-700 absolute px-4 right-0 bg-gray-900 shadow-sm w-full h-[100vh] top-[90%] opacity-0 -translate-x-full transition-all">
             <ul class="text-left gap-8 text-xl flex flex-col items-start justify-start h-full py-8">
+                {% if request.user.is_staff %}
                 <li class="w-max list-none inline-block px-5 group">
                     <a href="{% url 'home' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Home</a>
                 </li>
                 <li class="w-max list-none inline-block px-5 group">
-                    <a href="" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Dokter</a>
+                    <a href="{% url 'input_dokter' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Dokter</a>
                 </li>
                 <li class="w-max list-none inline-block px-5 group">
-                    <a href="" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">FQA</a>
+                    <a href="{% url 'daftar_pasien' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Pasien</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Nomor Antrian</a>
+                </li>
+                {% elif request.user.is_dokter %}
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'home' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Home</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'daftar_pasien' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Pasien</a>
+                </li>
+                {% else %}
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'home' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Home</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'daftar_dokter' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Dokter</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'faq' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">FAQ</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
                     <a href="" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Riwayat</a>
                 </li>
+                {% endif %}
                 <ul class="flex justify-center items-center w-full gap-8 mt-16">
                     <li>
                         <a href="https://twitter.com">

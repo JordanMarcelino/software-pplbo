@@ -26,6 +26,7 @@ agama = (
 )
 
 class Users(AbstractUser):
+    nama = models.CharField(_('nama lengkap'), max_length=255)
     email = models.EmailField(_('email address'), unique=True)
     avatar = models.ImageField(_('avatar'), null=True, default="man.png")
     jenis_kelamin = models.CharField(_('jenis kelamin'), max_length=255, choices=jenis_kelamin)
@@ -77,11 +78,14 @@ class Queue(models.Model):
     nomor = models.IntegerField(auto_created=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-nomor']
+
     def is_expired(self):
         tz = pytz.timezone('Asia/Jakarta')
         time_difference = timezone.now().astimezone(tz) - self.created_at
 
-        return time_difference.total_seconds() > 600
+        return time_difference.total_seconds() > 900
 
     def __str__(self):
         return self.user.username

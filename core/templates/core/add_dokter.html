@@ -1,0 +1,66 @@
+{% load static tailwind_tags %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% if page == 'edit' %} Edit Dokter {% else %} Add Dokter {% endif %} - Chastain, Inc</title>
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico'%}" type="image/x-icon" />
+        {% tailwind_css %}
+        <style>
+            input,
+            textarea,
+            select {
+                width: 100%;
+                border: 1px solid #f8b501 !important;
+                padding: 0.5rem !important;
+                border-radius: 0.5rem !important;
+                transition: all 0.5ms ease-in;
+                outline: none;
+                color: black !important;
+                box-shadow: none;
+                transition: all 0.5ms ease-in-out;
+                resize: none;
+            }
+
+            input[type="file"] {
+                color: white !important;
+            }
+
+            input:focus {
+                border: 1px solid #111827 !important;
+                outline: none !important;
+                box-shadow: none !important;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-900 overflow-x-hidden min-h-screen scroll-smooth">
+        {% include 'navbar.html'%}
+        <div class="w-screen h-max mt-8 px-8 flex flex-col gap-8 shadow-sm mx-auto rounded-md py-12 text-white">
+            <h2 class="text-2xl text-center font-bold">{% if page == 'edit' %} Edit Dokter {% else %} Add Dokter {% endif %}</h2>
+            <form action="" method="POST" class="flex flex-col gap-4 justify-evenly md:w-max md:mx-auto" enctype="multipart/form-data">
+                {% csrf_token %} {{ form.non_field_errors }} {% for field in form %}
+                <div class="">
+                    <label for="{{field.id_for_label}}" class="block opacity-80 mb-2">{{field.label}}</label>
+                    {{field}} {% if field.errors %}
+                    <ul>
+                        {% for error in field.errors %}
+                        <div class="bg-red-300/[0.4] text-sm w-full rounded-md p-2 h-max mt-2">
+                            <p class="text-red-500">{{ error }}</p>
+                        </div>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <div class="group w-full md:mx-auto">
+                    <button class="btn w-full flex items-center justify-center gap-2 group text-black bg-green-400" type="submit">{% if page == 'edit' %} Save {% else %} Insert {% endif %}</button>
+                </div>
+                <div class="group w-full md:mx-auto">
+                    <a href="{% url 'input_dokter' %}" class="btn w-full flex items-center justify-center gap-2 group text-black">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

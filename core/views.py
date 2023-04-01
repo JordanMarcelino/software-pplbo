@@ -1,5 +1,6 @@
 import requests
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
 from django.http import Http404
@@ -154,9 +155,138 @@ def logout_page(request):
     logout(request)
     return redirect('home')
 
+@login_required(login_url='login')
+def edit_profile(request):
+    form = UserUpdateForm(instance=request.user)
+    
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    
+    context = {'form': form}
+    return render(request, 'core/profile.html', context=context)
+
 def daftar_dokter(request):
     return render(request, 'core/daftar_dokter.html')
 
+@login_required(login_url='login')
+def daftar_pasien(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    pasien = Users.objects.filter((Q(nik__contains=q) | Q(nama__icontains=q) | Q(email__icontains=q)), is_dokter=True)
+    
+    if not request.user.is_dokter and not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        page = request.POST.get('page')
+    else:
+        page = 1
+    
+    paginator = Paginator(pasien, 10)
+    obj = paginator.get_page(page)
+    context = {'pasiens': obj , 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages}
+    
+    return render(request, 'core/daftar_pasien.html', context=context)
+
+def faq(request):
+    return render(request, 'core/faq.html')
+
+@login_required(login_url='login')
+def input_dokter(request):
+    dokter = Users.objects.filter(is_dokter=True)
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        id = request.POST.get('dokter')
+        page = request.POST.get('page')
+        
+        print(id)
+        if id != None:
+            print(Users.objects.get(id=id))
+    else:
+        page = 1
+    
+    paginator = Paginator(dokter, 5)
+    obj = paginator.get_page(page)
+    context = {'dokters': obj , 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages}
+    return render(request, 'core/input_dokter.html', context=context)
+
+@login_required(login_url='login')
+def add_dokter(request):
+    form = UserCreateForm()
+    if not request.user.is_staff:
+        return redirect('home')
+        
+    if request.method == 'POST':
+        form = UserCreateForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_dokter = True
+            
+            if user.jenis_kelamin == "Perempuan":
+                user.avatar = "woman.png"
+            
+            user.save()
+            return redirect('input_dokter')
+        
+    context = {'form': form}
+    return render(request, 'core/add_dokter.html', context=context)
+
+
+@login_required(login_url='login')
+def delete_dokter(request, id):
+    dokter = Users.objects.get(id=id)
+    if not request.user.is_staff:
+        return redirect('home')
+        
+    if request.method == 'POST':
+        dokter.delete()
+        return redirect('input_dokter')
+        
+    context = {'dokter':dokter}
+    return render(request, 'core/delete_confirmation.html', context=context)
+
+@login_required(login_url='login')
+def edit_dokter(request, id):
+    dokter = Users.objects.get(id=id)
+    form = UserUpdateForm(instance=dokter)
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, request.FILES, instance=dokter)
+        if form.is_valid():
+            form.save()
+            return redirect('input_dokter')
+    
+    
+    context = {'form':form, 'page':'edit'}
+    return render(request, 'core/add_dokter.html', context=context)
+
+
+@login_required(login_url='login')
+def edit_pasien(request, id):
+    pasien = Users.objects.get(id=id)
+    form = UserUpdateForm(instance=pasien)
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, request.FILES, instance=pasien)
+        if form.is_valid():
+            form.save()
+            return redirect('daftar_pasien')
+    
+    
+    context = {'form':form, 'page':'edit'}
+    return render(request, 'core/edit_pasien.html', context=context)
+    
 
 def error_handler(request, exception=None, status_code=None):
     if status_code == 400:

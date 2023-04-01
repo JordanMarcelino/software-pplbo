@@ -11,13 +11,14 @@ class UserCreateForm(UserCreationForm):
     tanggal_lahir = forms.DateField(widget=forms.TextInput(attrs={'type':'date', 'min':'1900-01-01'}))
     class Meta:
         model = Users
-        fields = ['nik', 'username', 'email', 'alamat', 'tanggal_lahir', 'golongan_darah', 'no_telepon', 'avatar', 'jenis_kelamin', 'agama', 'password1', 'password2']
+        fields = ['nik', 'nama', 'username', 'email', 'alamat', 'tanggal_lahir', 'golongan_darah', 'no_telepon', 'jenis_kelamin', 'agama', 'password1', 'password2']
 
     
 class UserUpdateForm(ModelForm):
+    tanggal_lahir = forms.DateField(widget=forms.TextInput(attrs={'type':'date', 'min':'1900-01-01'}))
     class Meta:
         model = Users
-        fields = ['username', 'email', 'avatar', 'alamat', 'tanggal_lahir', 'golongan_darah', 'no_telepon', 'jenis_kelamin', 'agama']
+        fields = ['email', 'username', 'avatar', 'nama', 'alamat', 'tanggal_lahir', 'golongan_darah', 'no_telepon', 'jenis_kelamin', 'agama']
 
 
 class SetPasswordForm(SetPasswordForm):

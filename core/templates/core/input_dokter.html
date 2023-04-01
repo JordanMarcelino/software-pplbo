@@ -1,0 +1,125 @@
+{% load static tailwind_tags %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Daftar Dokter - Chastain, Inc</title>
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico'%}" type="image/x-icon" />
+        {% tailwind_css %}
+        <style>
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+
+            input[type="number"]:focus {
+                outline: none !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+        </style>
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+        <div class="w-full h-full px-4 py-4 overflow-visible text-black">
+            <div class="w-full h-max bg-white rounded-md shadow-md px-8 py-8 overflow-x-scroll whitespace-nowrap">
+                <form action="" method="POST" class="dokter-form">
+                    {% csrf_token %}
+                    <table class="table-auto w-full h-max">
+                        <thead>
+                            <tr>
+                                <th colspan="3" class="text-2xl font-semibold text-start">Daftar Dokter</th>
+                            </tr>
+                            <tr>
+                                <th class="px-2 py-2 border-l-2 border-r-2 border-neutral bg-neutral text-white text-start">NIK</th>
+                                <th class="px-2 py-2 border-l-2 border-r-2 border-neutral bg-neutral text-white text-start">Username</th>
+                                <th class="px-2 py-2 border-l-2 border-r-2 border-neutral bg-neutral text-white text-start">Email</th>
+                                <th class="px-2 py-2 border-l-2 border-r-2 border-neutral bg-neutral text-white text-start">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dokter in dokters %}
+                            <tr class="">
+                                <td class="px-2 py-2 border-r-2 border-b-2 border-l-2 border-neutral font-medium">{{dokter.nik}}</td>
+                                <td class="px-2 py-2 border-r-2 border-b-2 border-neutral font-medium">{{dokter.username}}</td>
+                                <td class="px-2 py-2 border-r-2 border-b-2 border-neutral font-medium">{{dokter.email}}</td>
+                                <td class="px-2 py-2 border-r-2 border-b-2 border-neutral flex justify-center gap-4">
+                                    <a href="{% url 'delete_dokter' dokter.id%}" class="delete-single w-max h-max rounded-full px-2 py-2 bg-red-600 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill text-white" viewBox="0 0 16 16">
+                                            <path
+                                                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+                                            />
+                                        </svg>
+                                    </a>
+                                    <a href="{% url 'edit_dokter' dokter.id %}" class="edit w-max h-max rounded-full px-2 py-2 bg-green-400 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-fill text-white" viewBox="0 0 16 16">
+                                            <path
+                                                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
+                                            />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td class="font-bold text-neutral" colspan="2">
+                                    <p class="inline">PAGE</p>
+                                    <input type="number" name="page" id="page" value="{{page}}" min="1" max="{{total_page}}" required class="page border-none w-12 mx-2 out-of-range:text-red-500" />
+                                    <div class="inline">
+                                        <p class="inline">OF</p>
+                                        <p class="inline ml-2">{{ total_page }}</p>
+                                    </div>
+                                </td>
+                                <td class="flex items-center gap-4 pt-1">
+                                    <div class="group">
+                                        {% if prev %}
+                                        <button type="submit" class="btn prev cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+                                            </svg>
+                                        </button>
+                                        {% else %}
+                                        <button type="submit" id="prev" class="btn prev" disabled>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+                                            </svg>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                    <div class="group">
+                                        {% if next %}
+                                        <button type="submit" class="btn next cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                            </svg>
+                                        </button>
+                                        {% else %}
+                                        <button type="submit" class="btn next" disabled>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                            </svg>
+                                        </button>
+
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="py-4 flex">
+                                    <a href="{% url 'add_dokter' %}" class="btn">Add Dokter</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </body>
+    <script src="{% static 'js/dokter.js' %}"></script>
+</html>

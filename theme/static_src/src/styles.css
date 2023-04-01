@@ -5,7 +5,7 @@
 
 @layer base {
     html {
-        @apply scroll-smooth font-poppins bg-neutral;
+        @apply scroll-smooth font-poppins bg-neutral text-white;
     }
 
     @media (prefers-reduced-motion: no-preference) {
@@ -17,7 +17,7 @@
 
 @layer components {
     .btn {
-        @apply w-max bg-yellow-300 py-2 px-4 font-bold border border-transparent whitespace-nowrap rounded-sm hover:bg-gray-900 border-yellow-300 hover:text-white duration-300 hover:border box-border;
+        @apply w-max bg-yellow-300 py-2 px-4 font-bold border border-transparent whitespace-nowrap rounded-sm hover:bg-gray-900 border-yellow-300 hover:text-white duration-300 hover:border box-border text-black disabled:bg-neutral disabled:text-white disabled:opacity-60;
     }
 
     .hamburger-toggle {

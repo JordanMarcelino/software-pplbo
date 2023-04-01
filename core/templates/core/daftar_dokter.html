@@ -1,114 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Detail Doctor Page</title>
-    <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body>
-    <!-- Doctor -->
-    <div id="modal-container" class="hidden w-screen h-screen fixed bg-gray-900/[.9] z-[100]  justify-center items-center">
-      <div class="relative p-20 bg-[#FDE047] rounded-2xl">
-        <!-- Modal 1 -->
-        <div id="modal1" class=" flex gap-10">
-          <img class="w-[200px] h-[250px] rounded-xl" src="./assets/Angie Robertie.png"  alt="doc1" />
-          <div class="flex flex-col justify-center">
-            <h2 class="text-[22px] font-bold text-center mb-3">Angie Roberto</h2>
-            <h2 class="font-semibold text-[14px]">Specialty</h2>
-            <h2 class="mb-2">Dentistry</h2>
-            <h2 class="font-semibold text-[14px]">Address</h2>
-            <h2 class="mb-2">Tulips Street, 99</h2>
-            <h2 class="font-semibold text-[14px]">Phone Number</h2>
-            <h2 class="mb-2">030 6012021</h2>
-          </div>
-        </div>
-        <!-- Modal 2 -->
-        <div id="modal2" class="flex gap-10">
-          <img class="w-[200px] h-[250px] rounded-xl" src="./assets/Alice Wynne.png"  alt="doc1" />
-          <div class="flex flex-col justify-center">
-            <h2 class="text-[22px] font-bold text-center mb-3">Alice Wynne</h2>
-            <h2 class="font-semibold text-[14px]">Specialty</h2>
-            <h2 class="mb-2">Cardiologist</h2>
-            <h2 class="font-semibold text-[14px]">Address</h2>
-            <h2 class="mb-2">Rose Street, 88</h2>
-            <h2 class="font-semibold text-[14px]">Phone Number</h2>
-            <h2 class="mb-2">030 9012021</h2>
-          </div>
-        </div>
-        <!-- Modal 3 -->
-        <div id="modal3" class="flex gap-10">
-          <img class="w-[200px] h-[250px] rounded-xl" src="./assets/Bob Malone.png"  alt="doc1" />
-          <div class="flex flex-col justify-center">
-            <h2 class="text-[22px] font-bold text-center mb-3">Bob Malone</h2>
-            <h2 class="font-semibold text-[14px]">Specialty</h2>
-            <h2 class="mb-2">Dermatologist</h2>
-            <h2 class="font-semibold text-[14px]">Address</h2>
-            <h2 class="mb-2">Sunflower Street, 66</h2>
-            <h2 class="font-semibold text-[14px]">Phone Number</h2>
-            <h2 class="mb-2">030 7012021</h2>
-          </div>
-        </div>
-        <!-- Modal 4 -->
-        <div id="modal4" class="flex gap-10">
-          <img class="w-[200px] h-[250px] rounded-xl" src="./assets/Shakira Tereshkova.png"  alt="doc1" />
-          <div class="flex flex-col justify-center">
-            <h2 class="text-[22px] font-bold text-center mb-3">Shakira Tereshkova</h2>
-            <h2 class="font-semibold text-[14px]">Specialty</h2>
-            <h2 class="mb-2">Obstetrician</h2>
-            <h2 class="font-semibold text-[14px]">Address</h2>
-            <h2 class="mb-2">Jasmine Street, 77</h2>
-            <h2 class="font-semibold text-[14px]">Phone Number</h2>
-            <h2 class="mb-2">030 8012021</h2>
-          </div>
-        </div>
-        
-        <div id="close-modal-button" class="rounded-full cursor-pointer absolute top-[10px] right-[10px] bg-gray-900 text-white p-2">X</div>
-      </div>
-    </div>
-
-
-    </div>
-    <section class="bg-gray-900 min-h-screen flex flex-col items-center justify-center py-20">
-    
-      <h1 class="text-[#FDE047] text-[32px] font-bold">Doctor List</h1>
-      <div class="bg-gray-500 w-[80%] max-w-[1500px] flex gap-5 justify-center flex-wrap rounded-2xl shadow-lg max-w-3xl p-5">
-        <!-- Doctor 1 -->
-        <div id="doc1" class="transition duration-[400ms] hover:shadow-[0_0_10px_#FFFFFF] relative w-[200px] h-[250px] rounded-2xl overflow-hidden cursor-pointer">
-          <img class="w-full h-full" src="./assets/Angie Robertie.png" alt="doc1">
-          <div class="w-full absolute bg-gradient-to-t from-white via-white to-transparent px-3 py-2 pt-8 bottom-0">
+{% extends 'main.html' %} {% load static %} {% block title %} Daftar Dokter - Chastain, Inc {% endblock %} {% block content %}
+<section class="px-16 py-8 min-h-screen grid md:grid-cols-2 lg:grid-cols-3 place-items-center">
+    <div class="transition duration-[400ms] hover:border-primary border border-transparent w-60 h-max rounded-md cursor-pointer p-4 bg-white">
+        <img class="w-full h-64" src="{% static 'images/Bob_Malone.png' %}" alt="doc1" />
+        <div class="w-full text-center text-black">
             <h2 class="text-[24px] font-bold mb-[-5px]">Angie Roberto</h2>
             <h2 class="text-[16px]">Dentistry</h2>
-          </div>
         </div>
-        <!-- Doctor 2 -->
-        <div id="doc2" class="transition duration-[400ms] hover:shadow-[0_0_10px_#FFFFFF] relative w-[200px] h-[250px] rounded-2xl overflow-hidden cursor-pointer">
-          <img class="w-full h-full" src="./assets/Alice Wynne.png" alt="doc1">
-          <div class="w-full absolute bg-gradient-to-t from-white via-white to-transparent px-3 py-2 pt-8 bottom-0">
-            <h2 class="text-[24px] font-bold mb-[-5px]">Alice Wynne</h2>
-            <h2 class="text-[16px]">Cardiologist</h2>
-          </div>
+    </div>
+    <div class="transition duration-[400ms] hover:border-primary border border-transparent w-60 h-max rounded-md cursor-pointer p-4">
+        <img class="w-full h-64" src="{% static 'images/Angie_Robertie.png' %}" alt="doc1" />
+        <div class="w-full text-center">
+            <h2 class="text-[24px] font-bold mb-[-5px]">Angie Roberto</h2>
+            <h2 class="text-[16px]">Dentistry</h2>
         </div>
-        <!-- Doctor 3 -->
-        <div id="doc3" class="transition duration-[400ms] hover:shadow-[0_0_10px_#FFFFFF] relative w-[200px] h-[250px] rounded-2xl overflow-hidden cursor-pointer">
-          <img class="w-full h-full" src="./assets/Bob Malone.png" alt="doc1">
-          <div class="w-full absolute bg-gradient-to-t from-white via-white to-transparent px-3 py-2 pt-8 bottom-0">
-            <h2 class="text-[24px] font-bold mb-[-5px]">Bob Malone</h2>
-            <h2 class="text-[16px]">Dermatologist</h2>
-          </div>
-        </div>
-        <!-- Doctor 4 -->
-        <div id="doc4" class="transition duration-[400ms] hover:shadow-[0_0_10px_#FFFFFF] relative w-[200px] h-[250px] rounded-2xl overflow-hidden cursor-pointer">
-          <img class="w-full h-full" src="./assets/Shakira Tereshkova.png" alt="doc1">
-          <div class="w-full absolute bg-gradient-to-t from-white via-white to-transparent px-3 py-2 pt-8 bottom-0">
-            <h2 class="text-[24px] font-bold mb-[-5px]">Shakira T.</h2>
-            <h2 class="text-[16px]">Obstetrician</h2>
-          </div>
-        </div>
-      </div>
-    </section>
-    <script src="./script.js"></script>
-  </body>
-</html>
+    </div>
+</section>
+{% endblock %}
