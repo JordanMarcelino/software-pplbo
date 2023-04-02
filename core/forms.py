@@ -26,3 +26,9 @@ class SetPasswordForm(SetPasswordForm):
     class Meta:
         model = Users
         fields = ['new_password1', 'new_password2']
+        
+        
+class RekamMedisForm(ModelForm):
+    class Meta:
+        model = RekamMedis
+        exclude = ['id', 'created_at', 'pasien', 'dokter']

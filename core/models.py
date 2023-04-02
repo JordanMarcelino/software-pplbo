@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 from uuid import uuid4
 import pytz
+from datetime import date
 
 # Create your models here.
 
@@ -40,6 +41,11 @@ class Users(AbstractUser):
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    
+    @property
+    def age(self):
+        today = date.today()
+        return today.year - self.tanggal_lahir.year - ((today.month, today.day) < (self.tanggal_lahir.month, self.tanggal_lahir.day))
     
 class EmailConfirmation(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -99,4 +105,7 @@ class RekamMedis(models.Model):
     diagnosa = models.TextField(_('diagnosa'), blank=True, null=True)
     obat = models.TextField(_('obat'), blank=True, null=True)
     riwayat_penyakit = models.TextField(_('riwayat penyakit'), blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-created_at']
     

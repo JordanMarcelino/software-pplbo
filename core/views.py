@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 from .models import Users, EmailConfirmation, ResetPassword, Queue, RekamMedis
-from .forms import UserCreateForm, UserUpdateForm, SetPasswordForm
+from .forms import UserCreateForm, UserUpdateForm, SetPasswordForm, RekamMedisForm
 from .utils import send_email_confirmation, send_reset_password
 from .decorators import user_authenticated
 # Create your views here.
@@ -169,12 +169,15 @@ def edit_profile(request):
     return render(request, 'core/profile.html', context=context)
 
 def daftar_dokter(request):
-    return render(request, 'core/daftar_dokter.html')
+    dokter = Users.objects.filter(is_dokter=True)
+    
+    context = {'dokter':dokter}
+    return render(request, 'core/daftar_dokter.html', context=context)
 
 @login_required(login_url='login')
 def daftar_pasien(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    pasien = Users.objects.filter((Q(nik__contains=q) | Q(nama__icontains=q) | Q(email__icontains=q)), is_dokter=True)
+    pasien = Users.objects.filter((Q(nik__contains=q) | Q(nama__icontains=q) | Q(email__icontains=q)), is_dokter=False, is_staff=False)
     
     if not request.user.is_dokter and not request.user.is_staff:
         return redirect('home')
@@ -284,8 +287,39 @@ def edit_pasien(request, id):
             return redirect('daftar_pasien')
     
     
-    context = {'form':form, 'page':'edit'}
+    context = {'form':form}
     return render(request, 'core/edit_pasien.html', context=context)
+
+
+@login_required(login_url='login')
+def rekam_medis(request, id):
+    user = Users.objects.get(id=id)
+    rekam_medis = RekamMedis.objects.filter(pasien=user)
+    context = {'rekam_medis':rekam_medis}
+    return render(request, 'core/rekam_medis.html', context=context)
+
+
+@login_required(login_url='login')
+def add_rekam_medis(request, id):
+    pasien = Users.objects.get(id=id)
+    form = RekamMedisForm()
+    
+    if not request.user.is_dokter:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = RekamMedisForm(request.POST)
+        if form.is_valid():
+            rekam_medis = form.save(commit=False)
+            rekam_medis.pasien = pasien
+            rekam_medis.dokter = request.user.id
+            
+            rekam_medis.save()
+            return redirect('daftar_pasien')
+    
+    
+    context = {'form':form}
+    return render(request, 'core/add_rekam_medis.html', context=context)
     
 
 def error_handler(request, exception=None, status_code=None):

@@ -1,0 +1,14 @@
+{% extends 'main.html' %} {% block title %} Rekam Medis - Chastain, Inc {% endblock %} {% block content %}
+<div class="">
+    {% for rekam in rekam_medis %}
+    <h3>{{rekam.id}}</h3>
+    <h3>{{rekam.created_at|timesince}}</h3>
+    <h3>{{rekam.pasien}}</h3>
+    <h3>{{rekam.dokter}}</h3>
+    <h3>{{rekam.keluhan}}</h3>
+    <h3>{{rekam.diagnosa}}</h3>
+    <h3>{{rekam.obat}}</h3>
+    <h3>{{rekam.riwayat_penyakit}}</h3>
+    {% endfor %}
+</div>
+{% endblock %}

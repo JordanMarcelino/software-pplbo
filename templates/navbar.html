@@ -46,7 +46,7 @@
                     <a href="{% url 'faq' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>FAQ</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
-                    <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
+                    <a href="{% url 'add_rekam_medis' pasien.id %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
                 </li>
 
                 {% endif %} {% else %}
@@ -60,7 +60,7 @@
                     <a href="{% url 'faq' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>FAQ</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
-                    <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
+                    <a href="{% url 'login' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
                 </li>
                 {% endif %}
             </ul>
@@ -136,7 +136,7 @@
                     <a href="{% url 'faq' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">FAQ</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
-                    <a href="" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Riwayat</a>
+                    <a href="{% url 'add_rekam_medis' request.user.id %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Riwayat</a>
                 </li>
                 {% endif %}
                 <ul class="flex justify-center items-center w-full gap-8 mt-16">

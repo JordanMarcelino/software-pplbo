@@ -1,18 +1,25 @@
-{% extends 'main.html' %} {% load static %} {% block title %} Daftar Dokter - Chastain, Inc {% endblock %} {% block content %}
-<section class="px-16 py-8 min-h-screen grid md:grid-cols-2 lg:grid-cols-3 place-items-center">
-    <div class="transition duration-[400ms] hover:border-primary border border-transparent w-60 h-max rounded-md cursor-pointer p-4 bg-white">
-        <img class="w-full h-64" src="{% static 'images/Bob_Malone.png' %}" alt="doc1" />
-        <div class="w-full text-center text-black">
-            <h2 class="text-[24px] font-bold mb-[-5px]">Angie Roberto</h2>
-            <h2 class="text-[16px]">Dentistry</h2>
+{% extends 'main.html' %} {% load static %} {% block title %} Daftar Dokter - Chastain, Inc {% endblock %} {% block content %} {% for dok in dokter %}
+<section class="px-16 flex flex-col md:flex-row min-h-screen gap-12">
+    <div class="w-full md:w-1/2">
+        <div class="text-white md:mt-36 max-w-lg flex flex-col gap-4">
+            <h1 class="text-5xl md:text-4xl lg:text-6xl font-semibold leading">dr. {{dok.username}}</h1>
+        </div>
+
+        <div class="mt-10 flex flex-col gap-4 text-md md:text-lg">
+            <p>Nama Lengkap : {{dok.nama}}</p>
+            <p>Email : <a href="mailto:{{dok.email}}" class="font-bold hover:text-primary transition-all">{{dok.email}}</a></p>
+            <p>No Telepon : <a href="tel:+{{dok.no_telepon}}" class="font-bold hover:text-primary transition-all">{{dok.no_telepon}}</a></p>
+            <p>Umur : {{dok.age}} tahun</p>
         </div>
     </div>
-    <div class="transition duration-[400ms] hover:border-primary border border-transparent w-60 h-max rounded-md cursor-pointer p-4">
-        <img class="w-full h-64" src="{% static 'images/Angie_Robertie.png' %}" alt="doc1" />
-        <div class="w-full text-center">
-            <h2 class="text-[24px] font-bold mb-[-5px]">Angie Roberto</h2>
-            <h2 class="text-[16px]">Dentistry</h2>
-        </div>
+    {% if forloop.counter|divisibleby:2 %}
+    <div class="flex items-center justify-center w-full md:w-1/2 order-[-1] mt-24 md:mt-0">
+        <img src="{{dok.avatar.url}}" alt="Foto" class="object-cover" />
     </div>
+    {% else %}
+    <div class="flex items-center justify-center w-full md:w-1/2 order-[-1] md:order-1 mt-24 md:mt-0">
+        <img src="{{dok.avatar.url}}" alt="Foto" class="object-cover" />
+    </div>
+    {% endif %}
 </section>
-{% endblock %}
+{% endfor %} {% endblock %}
