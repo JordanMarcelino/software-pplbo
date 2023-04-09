@@ -1,14 +1,92 @@
-{% extends 'main.html' %} {% block title %} Rekam Medis - Chastain, Inc {% endblock %} {% block content %}
-<div class="">
+{% extends 'main.html' %} {% load static %} {% block title %} Rekam Medis - Chastain, Inc {% endblock %} {% block css %}
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    input[type="number"]:focus,
+    input[type="text"]:focus {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+</style>
+{% endblock %} {% block content %}
+<div class="min-h-screen w-full py-8 px-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center">
     {% for rekam in rekam_medis %}
-    <h3>{{rekam.id}}</h3>
-    <h3>{{rekam.created_at|timesince}}</h3>
-    <h3>{{rekam.pasien}}</h3>
-    <h3>{{rekam.dokter}}</h3>
-    <h3>{{rekam.keluhan}}</h3>
-    <h3>{{rekam.diagnosa}}</h3>
-    <h3>{{rekam.obat}}</h3>
-    <h3>{{rekam.riwayat_penyakit}}</h3>
+    <a href="{% url 'rekam_medis_detail' rekam.id %}" class="w-max h-max mx-auto">
+        <div class="w-max h-max rounded-md bg-white px-4 sm:px-8 py-4 text-black">
+            <div class="text-end mb-4">
+                <h2>{{rekam.created_at|date:"F Y"}}</h2>
+            </div>
+            <div class="text-end mb-4 sm:mb-6">
+                <h2 class="font-bold text-4xl sm:text-[2.5rem]">{{rekam.created_at|date:"l"}}</h2>
+            </div>
+            <div class="text-end mb-4">
+                <h2 class="font-bold text-6xl sm:text-7xl">{{rekam.created_at|date:"j"}}</h2>
+            </div>
+            <div class="text-end mb-4">
+                <h2 class="text-sm">{{rekam.created_at|timesince}} ago</h2>
+            </div>
+            <div class="flex flex-col gap-2">
+                <div class="w-full border-neutral border-2"></div>
+                <div class="w-full border-neutral border-2"></div>
+                <div class="w-full border-neutral border-2"></div>
+            </div>
+        </div>
+    </a>
     {% endfor %}
+    <div class="flex gap-4 bg-white items-center w-max p-4 rounded-md sm:col-span-2 md:col-span-3 lg:col-span-4 h-max mx-auto md:mx-4">
+        <div class="font-bold text-neutral">
+            <p class="inline">PAGE</p>
+            <form action="" method="post" class="rekammedis-form inline">
+                {% csrf_token %}
+                <input type="number" name="page" id="page" value="{{page}}" min="1" max="{{total_page}}" required class="page border-none w-12 mx-2 out-of-range:text-red-500" />
+            </form>
+            <div class="inline">
+                <p class="inline">OF</p>
+                <p class="inline ml-2">{{ total_page }}</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4 pt-1 px-4">
+            <div class="group">
+                {% if prev %}
+                <button type="submit" class="btn prev cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+                    </svg>
+                </button>
+                {% else %}
+                <button type="submit" id="prev" class="btn prev" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+                    </svg>
+                </button>
+                {% endif %}
+            </div>
+            <div class="group">
+                {% if next %}
+                <button type="submit" class="btn next cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                    </svg>
+                </button>
+                {% else %}
+                <button type="submit" class="btn next" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                    </svg>
+                </button>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
+<script src="{% static 'js/dokter.js' %}"></script>
 {% endblock %}

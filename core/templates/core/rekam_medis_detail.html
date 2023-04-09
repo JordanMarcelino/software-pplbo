@@ -1,0 +1,70 @@
+{% extends 'main.html' %} {% block title %} Rekam Medis - Chastain, Inc {% endblock %} {% block css %} {% endblock %} {% block content %}
+<div class="w-full h-full px-16 py-4 text-black">
+    <div class="w-full h-full px-16 py-8 bg-white rounded-md shadow-md overflow-x-scroll">
+        <table class="table-auto w-full h-max border-spacing-y-4 border-collapse">
+            <tbody>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Date</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.created_at}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Pasien</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.pasien.nama}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Umur</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.pasien.age}} tahun</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Agama</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.pasien.agama}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">No Telepon</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.pasien.no_telepon}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Golongan darah</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.pasien.golongan_darah}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Gender</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.pasien.jenis_kelamin}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Dokter</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{dokter.nama}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Keluhan</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.keluhan|linebreaksbr}}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Diagnosa</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.diagnosa|linebreaksbr }}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Obat</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.obat|linebreaksbr }}</td>
+                </tr>
+                <tr class="border-neutral border-2">
+                    <td class="font-bold text-xl py-4 pl-4">Riwayat Penyakit</td>
+                    <td class="font-bold text-xl">:</td>
+                    <td class="text-lg pl-4">{{rekam_medis.riwayat_penyakit|linebreaksbr }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

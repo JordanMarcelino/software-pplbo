@@ -77,6 +77,7 @@ def register_page(request):
     return render(request, 'core/authentication.html', {'form':form})
 
 
+@user_authenticated  
 def activate_account(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -206,8 +207,6 @@ def input_dokter(request):
     if request.method == 'POST':
         id = request.POST.get('dokter')
         page = request.POST.get('page')
-        
-        print(id)
         if id != None:
             print(Users.objects.get(id=id))
     else:
@@ -295,8 +294,32 @@ def edit_pasien(request, id):
 def rekam_medis(request, id):
     user = Users.objects.get(id=id)
     rekam_medis = RekamMedis.objects.filter(pasien=user)
-    context = {'rekam_medis':rekam_medis}
+    
+    if not request.user.is_dokter and not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        page = request.POST.get('page')
+    else:
+        page = 1
+    
+    paginator = Paginator(rekam_medis, 10)
+    obj = paginator.get_page(page)
+    context = {'rekam_medis': obj, 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages}
     return render(request, 'core/rekam_medis.html', context=context)
+
+
+@login_required(login_url='login')
+def rekam_medis_detail(request, id):
+    rekam_medis = RekamMedis.objects.get(id=id)
+    dokter = Users.objects.get(id=rekam_medis.dokter)
+    
+    if rekam_medis.pasien != request.user:
+        if not request.user.is_staff and not request.user.is_dokter:
+            return redirect('home')
+    
+    context = {'rekam_medis':rekam_medis, 'dokter':dokter}
+    return render(request, 'core/rekam_medis_detail.html', context=context)
 
 
 @login_required(login_url='login')
