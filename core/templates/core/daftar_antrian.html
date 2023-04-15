@@ -1,0 +1,25 @@
+{% extends 'main.html' %} {% load static %} {% block title %} Daftar Antrian - Chastain, Inc {% endblock %} {% block content %}
+<div class="min-h-screen w-full py-8 px-8">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="w-full grid sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center items-center">
+            {% for dok in dokter %}
+            <div class="w-60 bg-white rounded-md p-4 mx-auto group card transition duration-500" data-value="{{dok.id}}">
+                <img src="{{dok.avatar.url}}" alt="Avatar" class="group-hover:scale-105 transition duration-300" />
+                <h3 class="text-black text-center font-bold text-md mt-4">dr.{{dok.nama}}</h3>
+            </div>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="selected-dokter" id="selected-dokter" value="" />
+        <div class="flex flex-col gap-8 items-center justify-center mt-8">
+            <div class="group w-1/2">
+                <button class="btn w-full">Daftar</button>
+            </div>
+            <div class="group w-1/2">
+                <button class="btn w-full bg-red-600"><a href="{% url 'nomor_antrian' %}">Cancel</a></button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="{% static 'js/queue.js'%}"></script>
+{% endblock %}

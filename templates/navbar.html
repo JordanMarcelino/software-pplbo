@@ -26,7 +26,7 @@
                     <a href="{% url 'daftar_pasien' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Pasien</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
-                    <a href="" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Nomor Antrian</a>
+                    <a href="{% url 'nomor_antrian' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Nomor Antrian</a>
                 </li>
                 {% elif request.user.is_dokter %}
                 <li class="w-max list-none inline-block px-5 group">
@@ -40,13 +40,10 @@
                     <a href="{% url 'home' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Home</a>
                 </li>
                 <li class="w-max list-none inline-block px-5 group">
-                    <a href="{% url 'daftar_dokter' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Daftar Dokter</a>
-                </li>
-                <li class="w-max list-none inline-block px-5 group">
-                    <a href="{% url 'faq' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>FAQ</a>
+                    <a href="{% url 'nomor_antrian' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Nomor Antrian</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
-                    <a href="{% url 'add_rekam_medis' pasien.id %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
+                    <a href="{% url 'rekam_medis' request.user.id %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
                 </li>
 
                 {% endif %} {% else %}
@@ -116,7 +113,7 @@
                     <a href="{% url 'daftar_pasien' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Pasien</a>
                 </li>
                 <li class="w-max list-none inline-block px-5 group">
-                    <a href="" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Nomor Antrian</a>
+                    <a href="{% url 'nomor_antrian' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Nomor Antrian</a>
                 </li>
                 {% elif request.user.is_dokter %}
                 <li class="w-max list-none inline-block px-5 group">
@@ -125,7 +122,7 @@
                 <li class="w-max list-none inline-block px-5 group">
                     <a href="{% url 'daftar_pasien' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Daftar Pasien</a>
                 </li>
-                {% else %}
+                {% else %} {% if not request.user.is_authenticated %}
                 <li class="w-max list-none inline-block px-5 group">
                     <a href="{% url 'home' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Home</a>
                 </li>
@@ -136,9 +133,19 @@
                     <a href="{% url 'faq' %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">FAQ</a>
                 </li>
                 <li class="list-none inline-block px-5 group">
-                    <a href="{% url 'add_rekam_medis' request.user.id %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Riwayat</a>
+                    <a href="{% url 'rekam_medis' request.user.id %}" class="no-underline flex text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap">Riwayat</a>
                 </li>
-                {% endif %}
+                {% else %}
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'home' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Home</a>
+                </li>
+                <li class="w-max list-none inline-block px-5 group">
+                    <a href="{% url 'nomor_antrian' %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Nomor Antrian</a>
+                </li>
+                <li class="list-none inline-block px-5 group">
+                    <a href="{% url 'rekam_medis' request.user.id %}" class="no-underline text-white font-bold group-hover:text-yellow-300 transition-all whitespace-nowrap" px-2>Riwayat</a>
+                </li>
+                {% endif %} {% endif %}
                 <ul class="flex justify-center items-center w-full gap-8 mt-16">
                     <li>
                         <a href="https://twitter.com">

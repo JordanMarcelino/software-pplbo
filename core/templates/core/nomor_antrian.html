@@ -1,4 +1,4 @@
-{% extends 'main.html' %} {% load static %} {% block title %} Rekam Medis - Chastain, Inc {% endblock %} {% block css %}
+{% extends 'main.html' %} {% load static %} {% block title %} Nomor Antrian - Chastain, Inc {% endblock %} {% block css %}
 <style>
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -18,7 +18,7 @@
 </style>
 {% endblock %} {% block content %} {% if total == 0 %}
 <div class="min-h-screen w-full flex items-center justify-center">
-    <h3 class="font-bold text-6xl">Belum Ada Rekam Medis</h3>
+    <h3 class="font-bold text-6xl">Belum Ada Antrian</h3>
 </div>
 {% else %}
 <div class="min-h-screen w-full py-8 px-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center">
@@ -90,9 +90,16 @@
                 {% endif %}
             </div>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 {% endif %}
+<div class="group fixed bottom-8 right-8">
+    {% if antrian_pasien != None %}
+    <button class="btn"><a href="{% url 'daftar_antrian' %}">Daftar Antrian</a></button>
+    {% else %}
+    <button class="btn" disabled><a href="">Daftar Antrian</a></button>
+    {% endif %}
+</div>
 <script src="{% static 'js/dokter.js' %}"></script>
 {% endblock %}

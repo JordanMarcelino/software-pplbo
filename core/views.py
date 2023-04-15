@@ -290,13 +290,36 @@ def edit_pasien(request, id):
     return render(request, 'core/edit_pasien.html', context=context)
 
 
+def nomor_antrian(request):
+    antrian = Queue.objects.all()
+    antrian_pasien = Queue.objects.filter(pasien=request.user)
+    
+    if request.method == 'POST':
+        page = request.POST.get('page')
+    else:
+        page = 1
+    
+    paginator = Paginator(antrian, 10)
+    obj = paginator.get_page(page)
+    context = {'antrian': obj, 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages, 'total': antrian.count(), 'antrian_pasien': antrian_pasien}
+    return render(request, 'core/nomor_antrian.html', context=context)
+
+@login_required(login_url='login')
+def daftar_antrian(request):
+    dokter = Users.objects.filter(is_dokter=True)
+    
+    context = {'dokter':dokter}
+    return render(request, 'core/daftar_antrian.html', context=context)
+
+
 @login_required(login_url='login')
 def rekam_medis(request, id):
     user = Users.objects.get(id=id)
     rekam_medis = RekamMedis.objects.filter(pasien=user)
     
-    if not request.user.is_dokter and not request.user.is_staff:
-        return redirect('home')
+    if user != request.user:
+        if not request.user.is_staff and not request.user.is_dokter:
+            return redirect('home')
     
     if request.method == 'POST':
         page = request.POST.get('page')
@@ -305,7 +328,7 @@ def rekam_medis(request, id):
     
     paginator = Paginator(rekam_medis, 10)
     obj = paginator.get_page(page)
-    context = {'rekam_medis': obj, 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages}
+    context = {'rekam_medis': obj, 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages, 'total': rekam_medis.count()}
     return render(request, 'core/rekam_medis.html', context=context)
 
 
