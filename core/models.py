@@ -47,6 +47,10 @@ class Users(AbstractUser):
         today = date.today()
         return today.year - self.tanggal_lahir.year - ((today.month, today.day) < (self.tanggal_lahir.month, self.tanggal_lahir.day))
     
+    @property
+    def first_name(self):
+        return self.nama.split(" ")[0]
+    
 class EmailConfirmation(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     confirmation_code = models.CharField(max_length=255)
@@ -78,10 +82,12 @@ class ResetPassword(models.Model):
     
     
 class Queue(models.Model):
+    COUNTER = 1
+    
     id = models.UUIDField(_('id'), default=uuid4, primary_key=True)
     pasien = models.ForeignKey(Users, on_delete=models.CASCADE)
     dokter = models.IntegerField()
-    nomor = models.IntegerField(auto_created=True)
+    nomor = models.IntegerField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -93,8 +99,18 @@ class Queue(models.Model):
 
         return time_difference.total_seconds() > 900
 
-    def __str__(self):
-        return self.user.username
+        
+    def increment_counter():
+        Queue.COUNTER += 1
+        
+    def reset_counter():
+        Queue.COUNTER = 1
+
+    @property
+    def doctor(self):
+        doc = Users.objects.get(id=self.dokter)
+        
+        return doc.username
     
 class RekamMedis(models.Model):
     id = models.UUIDField(_('id'), default=uuid4, primary_key=True)
@@ -108,4 +124,10 @@ class RekamMedis(models.Model):
     
     class Meta:
         ordering = ['-created_at']
+        
+    @property
+    def doctor(self):
+        doc = Users.objects.get(id=self.dokter)
+        
+        return doc.username
     

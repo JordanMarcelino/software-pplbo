@@ -1,4 +1,5 @@
 import requests
+from django.utils  import timezone
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -207,8 +208,6 @@ def input_dokter(request):
     if request.method == 'POST':
         id = request.POST.get('dokter')
         page = request.POST.get('page')
-        if id != None:
-            print(Users.objects.get(id=id))
     else:
         page = 1
     
@@ -292,21 +291,46 @@ def edit_pasien(request, id):
 
 def nomor_antrian(request):
     antrian = Queue.objects.all()
+    
+    for antri in antrian:
+        if antri.is_expired():
+            antri.delete()
+    
     antrian_pasien = Queue.objects.filter(pasien=request.user)
     
     if request.method == 'POST':
         page = request.POST.get('page')
+        no = request.POST.get("no_antri")
+        
+        if no != None:
+            Queue.objects.get(id=no).delete()
+            return redirect(request.path_info)
     else:
         page = 1
     
-    paginator = Paginator(antrian, 10)
+    
+    paginator = Paginator(antrian, 8)
     obj = paginator.get_page(page)
-    context = {'antrian': obj, 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages, 'total': antrian.count(), 'antrian_pasien': antrian_pasien}
+    context = {'antrian': obj, 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages, 'total': antrian.count(), 'antrian_pasien': antrian_pasien.count()}
     return render(request, 'core/nomor_antrian.html', context=context)
 
 @login_required(login_url='login')
 def daftar_antrian(request):
     dokter = Users.objects.filter(is_dokter=True)
+    antrian_pasien = Queue.objects.filter(pasien=request.user).count()
+    
+    if antrian_pasien != 0:
+        return redirect('nomor_antrian')
+    
+    if request.method == 'POST':
+        selected_dokter = request.POST.get('selected-dokter')
+        
+        if selected_dokter == "":
+            messages.error(request, "Pilih salah satu dokter !")
+        else:
+            queue = Queue.objects.create(pasien=request.user, dokter=int(selected_dokter), nomor=Queue.COUNTER)
+            Queue.increment_counter()
+            return redirect('nomor_antrian')
     
     context = {'dokter':dokter}
     return render(request, 'core/daftar_antrian.html', context=context)
@@ -326,7 +350,7 @@ def rekam_medis(request, id):
     else:
         page = 1
     
-    paginator = Paginator(rekam_medis, 10)
+    paginator = Paginator(rekam_medis, 8)
     obj = paginator.get_page(page)
     context = {'rekam_medis': obj, 'page': obj.number, 'next': obj.has_next, 'prev': obj.has_previous, 'total_page': obj.paginator.num_pages, 'total': rekam_medis.count()}
     return render(request, 'core/rekam_medis.html', context=context)

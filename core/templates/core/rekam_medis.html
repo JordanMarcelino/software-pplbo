@@ -18,7 +18,7 @@
 </style>
 {% endblock %} {% block content %} {% if total == 0 %}
 <div class="min-h-screen w-full flex items-center justify-center">
-    <h3 class="font-bold text-6xl">Belum Ada Rekam Medis</h3>
+    <h3 class="font-bold text-6xl text-center">Belum Ada Rekam Medis</h3>
 </div>
 {% else %}
 <div class="min-h-screen w-full py-8 px-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center">
@@ -35,7 +35,7 @@
                 <h2 class="font-bold text-6xl sm:text-7xl">{{rekam.created_at|date:"j"}}</h2>
             </div>
             <div class="text-end mb-4">
-                <h2 class="text-sm">{{rekam.created_at|timesince}} ago</h2>
+                <h2 class="text-sm">dr.{{rekam.doctor}}</h2>
             </div>
             <div class="flex flex-col gap-2">
                 <div class="w-full border-neutral border-2"></div>

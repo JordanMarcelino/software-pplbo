@@ -18,24 +18,37 @@
 </style>
 {% endblock %} {% block content %} {% if total == 0 %}
 <div class="min-h-screen w-full flex items-center justify-center">
-    <h3 class="font-bold text-6xl">Belum Ada Antrian</h3>
+    <h3 class="font-bold text-6xl text-center">Belum Ada Antrian</h3>
 </div>
 {% else %}
 <div class="min-h-screen w-full py-8 px-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center">
-    {% for rekam in rekam_medis %}
-    <a href="{% url 'rekam_medis_detail' rekam.id %}" class="w-max h-max mx-auto">
+    {% for antri in antrian %}
+    <div class="w-max h-max mx-auto relative">
+        {% if request.user.is_staff %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="no_antri" class="rounded-full bg-red-500 absolute -top-2 -right-2" value="{{antri.id}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
+        </form>
+        {% endif %}
         <div class="w-max h-max rounded-md bg-white px-4 sm:px-8 py-4 text-black">
             <div class="text-end mb-4">
-                <h2>{{rekam.created_at|date:"F Y"}}</h2>
+                <h2>{{antri.created_at|date:"l, j F Y"}}</h2>
             </div>
             <div class="text-end mb-4 sm:mb-6">
-                <h2 class="font-bold text-4xl sm:text-[2.5rem]">{{rekam.created_at|date:"l"}}</h2>
+                <h2 class="font-bold text-4xl sm:text-[2.5rem]">{{antri.pasien.first_name}}</h2>
             </div>
             <div class="text-end mb-4">
-                <h2 class="font-bold text-6xl sm:text-7xl">{{rekam.created_at|date:"j"}}</h2>
+                <h2 class="font-bold text-6xl sm:text-7xl">{{antri.nomor}}</h2>
             </div>
             <div class="text-end mb-4">
-                <h2 class="text-sm">{{rekam.created_at|timesince}} ago</h2>
+                <h2 class="text-sm">dr.{{antri.doctor}}</h2>
+            </div>
+            <div class="text-end mb-4">
+                <h2 class="text-sm">{{antri.created_at|timesince}} ago</h2>
             </div>
             <div class="flex flex-col gap-2">
                 <div class="w-full border-neutral border-2"></div>
@@ -43,7 +56,7 @@
                 <div class="w-full border-neutral border-2"></div>
             </div>
         </div>
-    </a>
+    </div>
     {% endfor %} {% if total > 0 %}
     <div class="flex gap-4 bg-white items-center w-max p-4 rounded-md sm:col-span-2 md:col-span-3 lg:col-span-4 h-max mx-auto md:mx-4">
         <div class="font-bold text-neutral">
@@ -95,10 +108,10 @@
 </div>
 {% endif %}
 <div class="group fixed bottom-8 right-8">
-    {% if antrian_pasien != None %}
-    <button class="btn"><a href="{% url 'daftar_antrian' %}">Daftar Antrian</a></button>
+    {% if antrian_pasien != 0 %}
+    <button class="btn" disabled>Daftar Antrian</button>
     {% else %}
-    <button class="btn" disabled><a href="">Daftar Antrian</a></button>
+    <button class="btn"><a href="{% url 'daftar_antrian' %}">Daftar Antrian</a></button>
     {% endif %}
 </div>
 <script src="{% static 'js/dokter.js' %}"></script>
